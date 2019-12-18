@@ -60,9 +60,9 @@ def text_normalize(text, normalize=None, tokenize=True):
     tokens = __remove_stopwords(tokens)
 
     if normalize == "lemmatize":
-        tokens = __stem_tokens(tokens)
-    elif normalize == "stem":
         tokens = __lemmatize_tokens(tokens)
+    elif normalize == "stem":
+        tokens = __stem_tokens(tokens)
     elif normalize:
         raise ValueError
     
