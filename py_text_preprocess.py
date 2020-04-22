@@ -1,15 +1,17 @@
 """
 Text preprocessing module
-v0.1 November 17, 2019
+v0.2 April 22, 2020
 
 Provides the following functions for pre-processing text data in string format
-text_preprocess:  makes text lower case, strips punctuation and optionally
-                    preprocesses digits
-text_normalize:  tokenizes and optionally standardizes a text string
+text_preprocess:  Makes text lower case, strips punctuation and 
+                  optionally preprocesses digits
+text_tokenize:  Tokenizes and optionally removes stopwords
+text_normalize:  Lemmatizes or stems a list of tokens and optionally rejoins into a strong
 """
 
 import string 
 import re
+import inflect
 import nltk 
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize
@@ -18,9 +20,6 @@ from nltk.stem import WordNetLemmatizer
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
-        
-
-import inflect
 
 def text_preprocess(text, digits=None):
     """
