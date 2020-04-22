@@ -34,7 +34,7 @@ def text_preprocess(text, digits=None):
     
     # strip punctuation
     translator = str.maketrans('', '', string.punctuation) 
-    text = text.translate(translator)
+    text = text.replace('-', ' ').translate(translator)
 
     # convert digits to text
     if digits == "convert":
