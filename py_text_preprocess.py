@@ -47,33 +47,36 @@ def text_preprocess(text, digits=None):
 
     return text
 
-
-def text_normalize(text, normalize=None, tokenize=True):
-    """
-    text_normalize:  tokenizes and optionally standardizes a text string
-    args:   text        the text string to modify
-            normalize   (optional) "lemmatize" or "stem"
-    return: tokens      the processed tokens
-    """
+  
+def text_tokenize(text, remove_stopwords=False):
     tokens = word_tokenize(text) 
-    
-    tokens = __remove_stopwords(tokens)
+    if remove_stopwords:
+        tokens = __remove_stopwords(tokens)
+    return tokens
 
-    if normalize == "lemmatize":
+  
+def text_normalize(tokens, normalize='lemmatize', rejoin=False):
+    """
+    text_normalize:  normalizes a list of tokens
+    args:   text        list of word tokens
+            normalize   (optional) 'lemmatize' or 'stem'
+    return:             the processed list of tokens or rejoined string
+    """
+    if normalize == 'lemmatize':
         tokens = __lemmatize_tokens(tokens)
-    elif normalize == "stem":
+    elif normalize == 'stem':
         tokens = __stem_tokens(tokens)
     elif normalize:
-        raise ValueError
+        raise NotImplementedError
     
-    return tokens if tokenize else ' '.join(tokens)
+    return ' '.join(tokens) if rejoin else tokens
 
 
 # ==================== Helper functions ==================== #
 
 ## remove numbers
 def __remove_digits(text): 
-    result = re.sub(r'\s+\d+\s+', ' ', text) 
+    result = re.sub(r'\s*\d+\s*', ' ', text) 
     return result
 
 
@@ -102,14 +105,14 @@ def __remove_stopwords(tokens):
     return filtered_tokens
 
   
-# stem words in the list of tokenised words 
+# stem words in a list of tokenized words 
 def __stem_tokens(tokens): 
     stemmer = PorterStemmer() 
     stems = [stemmer.stem(token) for token in tokens] 
     return stems 
   
 
-# lemmatize string 
+# lemmatize words in a list of tokenized words 
 def __lemmatize_tokens(tokens): 
     lemmatizer = WordNetLemmatizer() 
     lemmas = [lemmatizer.lemmatize(token) for token in tokens] 
