@@ -9,7 +9,6 @@ text_tokenize:  Tokenizes and optionally removes stopwords
 text_normalize:  Lemmatizes or stems a list of tokens and optionally rejoins into a strong
 """
 
-import string 
 import re
 import inflect
 import nltk 
@@ -21,20 +20,25 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-def text_preprocess(text, digits=None):
+def text_preprocess(text, lower=True, remove_punctuation=True, digits=None):
     """
     text_preprocess:  makes text lower case, strips punctuation and optionally
-                        preprocesses digits
-    args:   text        the text string to modify
-            digits      (optional) "remove" or "convert" to text
+                      preprocesses digits
+    args:   text                the text string to modify
+            lower               whether to make the text lower case
+            remove_punctation   whether to remove punctuation
+            digits              (optional) "remove" or "convert" to text
     return: text        the processed text
     """
     # make lower case
-    text = text.lower()
+    if lower:
+        text = text.lower()
     
-    # strip punctuation
-    translator = str.maketrans('', '', string.punctuation) 
-    text = text.replace('-', ' ').translate(translator)
+    # remove punctuation
+    if remove_punctuation:
+        punct_space = str.maketrans('-/_&', '    ')  # replaces '-', '_', '&', '/' with ' '
+        punct_strip = str.maketrans('', '', '!"#$%\()*+,.:;<=>?@[\\]^`{|}~')  # all string.punctuation except _'-/&
+        text = text.translate(punct_space).translate(punct_strip)
 
     # convert digits to text
     if digits == "convert":
